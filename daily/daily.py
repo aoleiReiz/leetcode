@@ -98,11 +98,22 @@ class Solution:
 
         return "".join(c_arr)
 
+    def maximumDifference(self, nums: List[int]) -> int:
+        ret = float("-inf")
+        n = len(nums)
+        for i in range(n - 1):
+            for j in range(i+1, n):
+                diff = nums[j] - nums[i]
+                if diff > ret:
+                    ret = diff
+        return ret
+
+
+
 
 if __name__ == '__main__':
     s = Solution()
-    strings = ["ab-cd", "a-bC-dEf-ghIj","Test1ng-Leet=code-Q!"]
-    for string in strings:
-        print(s.reverseOnlyLetters(string))
+    nums = [7,1,5,4]
+    print(s.maximumDifference( nums))
 
 
