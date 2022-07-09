@@ -54,5 +54,58 @@ def multiStringSearch(bigString, smallStrings):
     return ans
 
 
+def patternMatcher(pattern, string):
+    # Write your code here.
+    counter = {
+        "x": 0,
+        "y": 0
+    }
+    for c in pattern:
+        counter[c] += 1
+    start_pattern_char = pattern[0]
+    other_pattern_char = "x" if start_pattern_char != "x" else "y"
+    for i in range(1, len(string)):
+        cur_string_index = i
+        cur_pattern_index = 1
+        start_char = string[:i]
+        char_length_start = i
+        if counter[other_pattern_char] > 0 and (len(string) - char_length_start * counter[start_pattern_char]) % \
+                counter[other_pattern_char] != 0:
+            continue
+        if counter[other_pattern_char] == 0 and counter[start_pattern_char] * start_char != string:
+            continue
+        elif counter[other_pattern_char] == 0 and counter[start_pattern_char] * start_char == string:
+            return [start_char, ""] if start_pattern_char == "x" else ["", start_char]
+
+        char_length_other = (len(string) - char_length_start * counter[start_pattern_char]) // counter[
+            other_pattern_char]
+        other_char = ""
+        while cur_string_index < len(string) and cur_pattern_index < len(pattern):
+            if pattern[cur_pattern_index] == start_pattern_char:
+                if string[cur_string_index: cur_string_index + char_length_start] != start_char:
+                    break
+                else:
+                    cur_string_index += char_length_start
+                    cur_pattern_index += 1
+            else:
+                if other_char == "":
+                    other_char = string[cur_string_index: cur_string_index + char_length_other]
+                    cur_pattern_index += 1
+                    cur_string_index = len(string) if cur_string_index + char_length_other >= len(
+                        string) else cur_string_index + char_length_other
+                else:
+                    if other_char != string[cur_string_index: cur_string_index + char_length_other]:
+                        continue
+                    else:
+                        cur_string_index += char_length_other
+                        cur_pattern_index += 1
+
+        if cur_pattern_index == len(pattern) and cur_string_index == len(string):
+            return [start_char, other_char] if start_pattern_char == "x" else [other_char, start_char]
+    return []
+
+
 if __name__ == '__main__':
-    print(multiStringSearch("this is a big string", ["this", "yo", "is", "a", "bigger", "string", "kappa"]))
+    p = "xxyxxy"
+    string = "gogopowerrangergogopowerranger"
+    print(patternMatcher(p, string))
