@@ -10,11 +10,15 @@ def waterfallStreams(array, source):
 
             has_water_above = value_above < 0
             has_block = current_row[idx]  == 1
+
             if not has_water_above:
                 continue
             if not has_block:
                 current_row[idx] += value_above
+
                 break
+
+
 
             split_water = value_above / 2
             right_idx = idx
@@ -34,7 +38,6 @@ def waterfallStreams(array, source):
                     current_row[left_idx] += split_water
                     break
         row_above = current_row
-
     final_percentage = [ num * -100 for num in row_above]
     return final_percentage
 
